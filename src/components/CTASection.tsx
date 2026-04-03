@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const CTASection = () => {
   return (
@@ -11,8 +12,8 @@ const CTASection = () => {
         <p className="text-primary-foreground/80 text-lg mb-8 max-w-xl mx-auto">
           Let AI guide you through every step — from idea to income.
         </p>
-        <Button size="lg" variant="secondary" className="text-lg px-8 py-6 font-semibold">
-          Get Started Free <ArrowRight className="ml-2 w-5 h-5" />
+        <Button asChild size="lg" variant="secondary" className="text-lg px-8 py-6 font-semibold">
+          <Link to="/plan">Get Started Free <ArrowRight className="ml-2 w-5 h-5" /></Link>
         </Button>
       </div>
     </section>

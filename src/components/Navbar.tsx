@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Brain } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -14,7 +15,7 @@ const Navbar = () => {
           <a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</a>
           <a href="#pricing" className="hover:text-foreground transition-colors">Pricing</a>
         </div>
-        <Button size="sm">Get Started</Button>
+        <Button asChild size="sm"><Link to="/plan">Get Started</Link></Button>
       </div>
     </nav>
   );
