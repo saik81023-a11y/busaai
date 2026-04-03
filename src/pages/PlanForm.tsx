@@ -4,13 +4,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ArrowLeft, Brain, Loader2, Sparkles } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ArrowLeft, Brain, Loader2, Sparkles, Save, FolderOpen } from "lucide-react";
+import { Link, Navigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
-
-type Msg = { role: "user" | "assistant"; content: string };
 
 const PLAN_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/business-plan`;
 
@@ -79,7 +78,6 @@ async function streamPlan({
     }
   }
 
-  // Final flush
   if (textBuffer.trim()) {
     for (let raw of textBuffer.split("\n")) {
       if (!raw) continue;
@@ -100,11 +98,17 @@ async function streamPlan({
 }
 
 const PlanForm = () => {
+  const { user, loading: authLoading } = useAuth();
   const [budget, setBudget] = useState("");
   const [location, setLocation] = useState("");
   const [businessIdea, setBusinessIdea] = useState("");
   const [result, setResult] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  if (authLoading) return null;
+  if (!user) return <Navigate to="/login" replace />;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,6 +120,7 @@ const PlanForm = () => {
 
     setIsLoading(true);
     setResult("");
+    setSaved(false);
 
     let accumulated = "";
 
@@ -139,24 +144,48 @@ const PlanForm = () => {
     }
   };
 
+  const handleSave = async () => {
+    if (!result || !user) return;
+    setIsSaving(true);
+
+    const { error } = await supabase.from("saved_plans").insert({
+      user_id: user.id,
+      budget: budget.trim(),
+      location: location.trim(),
+      business_idea: businessIdea.trim(),
+      plan_content: result,
+    });
+
+    if (error) {
+      toast.error("Failed to save plan");
+    } else {
+      toast.success("Plan saved!");
+      setSaved(true);
+    }
+    setIsSaving(false);
+  };
+
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <div className="border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-6 h-16 flex items-center gap-4">
-          <Link to="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm">Back</span>
-          </Link>
-          <div className="flex items-center gap-2">
-            <Brain className="w-5 h-5 text-primary" />
-            <span className="font-bold text-foreground">Business Planner</span>
+        <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Link to="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+              <ArrowLeft className="w-4 h-4" />
+              <span className="text-sm">Back</span>
+            </Link>
+            <div className="flex items-center gap-2">
+              <Brain className="w-5 h-5 text-primary" />
+              <span className="font-bold text-foreground">Business Planner</span>
+            </div>
           </div>
+          <Button asChild variant="outline" size="sm">
+            <Link to="/saved-plans"><FolderOpen className="w-4 h-4 mr-1" /> My Plans</Link>
+          </Button>
         </div>
       </div>
 
       <div className="max-w-5xl mx-auto px-6 py-8">
-        {/* Form */}
         <Card className="mb-8">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -222,11 +251,26 @@ const PlanForm = () => {
           </CardContent>
         </Card>
 
-        {/* Results */}
         {result && (
           <Card>
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Your AI Business Plan</CardTitle>
+              {!isLoading && (
+                <Button
+                  onClick={handleSave}
+                  disabled={isSaving || saved}
+                  variant={saved ? "secondary" : "default"}
+                  size="sm"
+                >
+                  {isSaving ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : saved ? (
+                    "✓ Saved"
+                  ) : (
+                    <><Save className="w-4 h-4 mr-1" /> Save Plan</>
+                  )}
+                </Button>
+              )}
             </CardHeader>
             <CardContent>
               <div className="prose prose-sm max-w-none dark:prose-invert">
