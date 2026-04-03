@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Brain } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
