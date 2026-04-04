@@ -53,7 +53,7 @@ const Enquiry = () => {
       <div className="min-h-screen bg-background flex items-center justify-center px-6">
         <Card className="max-w-md w-full text-center">
           <CardContent className="py-12 flex flex-col items-center gap-4">
-            <CheckCircle className="w-12 h-12 text-green-500" />
+            <CheckCircle className="w-12 h-12 text-primary" />
             <h2 className="text-xl font-bold text-foreground">Thank You!</h2>
             <p className="text-muted-foreground">
               Your enquiry has been submitted. We'll get back to you shortly.
