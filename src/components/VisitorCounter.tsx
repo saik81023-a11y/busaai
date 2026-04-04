@@ -6,37 +6,31 @@ const VisitorCounter = () => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    // Register this visitor
     const visitorId = crypto.randomUUID();
 
     const register = async () => {
-      await supabase.from("active_visitors").insert({ id: visitorId });
+      await (supabase.from as any)("active_visitors").insert({ id: visitorId });
     };
 
     const fetchCount = async () => {
-      const { count: c } = await supabase
-        .from("active_visitors")
+      const { count: c } = await (supabase.from as any)("active_visitors")
         .select("*", { count: "exact", head: true });
       setCount(c ?? 0);
     };
 
     register().then(fetchCount);
 
-    // Subscribe to realtime changes
     const channel = supabase
       .channel("visitors")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "active_visitors" },
-        () => {
-          fetchCount();
-        }
+        () => fetchCount()
       )
       .subscribe();
 
-    // Cleanup: remove visitor on unmount / page close
     const cleanup = async () => {
-      await supabase.from("active_visitors").delete().eq("id", visitorId);
+      await (supabase.from as any)("active_visitors").delete().eq("id", visitorId);
     };
 
     window.addEventListener("beforeunload", cleanup);
