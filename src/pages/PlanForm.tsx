@@ -251,34 +251,55 @@ const PlanForm = () => {
           </CardContent>
         </Card>
 
-        {result && (
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Your AI Business Plan</CardTitle>
-              {!isLoading && (
-                <Button
-                  onClick={handleSave}
-                  disabled={isSaving || saved}
-                  variant={saved ? "secondary" : "default"}
-                  size="sm"
-                >
-                  {isSaving ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : saved ? (
-                    "✓ Saved"
-                  ) : (
-                    <><Save className="w-4 h-4 mr-1" /> Save Plan</>
-                  )}
-                </Button>
+        {result && (() => {
+          const scoreMatch = result.match(/Feasibility Score:\s*(\d+)%/i);
+          const feasibilityScore = scoreMatch ? parseInt(scoreMatch[1], 10) : null;
+          const scoreColor = feasibilityScore !== null
+            ? feasibilityScore >= 70 ? "text-green-600" : feasibilityScore >= 40 ? "text-yellow-600" : "text-red-600"
+            : "";
+
+          return (
+            <>
+              {feasibilityScore !== null && !isLoading && (
+                <Card className="mb-4">
+                  <CardContent className="py-6 flex flex-col items-center gap-2">
+                    <p className="text-sm text-muted-foreground font-medium">Business Feasibility</p>
+                    <p className={`text-5xl font-bold ${scoreColor}`}>{feasibilityScore}%</p>
+                    <p className="text-xs text-muted-foreground">
+                      {feasibilityScore >= 70 ? "High feasibility – Strong potential!" : feasibilityScore >= 40 ? "Moderate feasibility – Needs refinement" : "Low feasibility – Consider pivoting"}
+                    </p>
+                  </CardContent>
+                </Card>
               )}
-            </CardHeader>
-            <CardContent>
-              <div className="prose prose-sm max-w-none dark:prose-invert">
-                <ReactMarkdown>{result}</ReactMarkdown>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <CardTitle>Your AI Business Plan</CardTitle>
+                  {!isLoading && (
+                    <Button
+                      onClick={handleSave}
+                      disabled={isSaving || saved}
+                      variant={saved ? "secondary" : "default"}
+                      size="sm"
+                    >
+                      {isSaving ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : saved ? (
+                        "✓ Saved"
+                      ) : (
+                        <><Save className="w-4 h-4 mr-1" /> Save Plan</>
+                      )}
+                    </Button>
+                  )}
+                </CardHeader>
+                <CardContent>
+                  <div className="prose prose-sm max-w-none dark:prose-invert">
+                    <ReactMarkdown>{result}</ReactMarkdown>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          );
+        })()}
 
         {isLoading && !result && (
           <Card>
