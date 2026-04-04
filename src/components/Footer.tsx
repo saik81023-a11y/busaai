@@ -1,4 +1,5 @@
 import { Brain } from "lucide-react";
+import VisitorCounter from "./VisitorCounter";
 
 const Footer = () => {
   return (
@@ -8,6 +9,7 @@ const Footer = () => {
           <Brain className="w-5 h-5 text-primary" />
           <span className="font-bold text-foreground">BusaAI</span>
         </div>
+        <VisitorCounter />
         <p className="text-sm text-muted-foreground">
           © 2026 BusaAI. AI-powered business planning for everyone.
         </p>

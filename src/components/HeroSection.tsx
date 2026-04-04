@@ -32,8 +32,8 @@ const HeroSection = () => {
           <Button asChild size="lg" className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/25">
             <Link to="/plan">Start Planning <ArrowRight className="ml-2 w-5 h-5" /></Link>
           </Button>
-          <Button size="lg" variant="outline" className="text-lg px-8 py-6">
-            See How It Works
+          <Button size="lg" variant="outline" className="text-lg px-8 py-6" asChild>
+            <a href="#how-it-works">See How It Works</a>
           </Button>
         </div>
 
