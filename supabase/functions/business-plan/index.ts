@@ -27,6 +27,9 @@ serve(async (req) => {
 
     const systemPrompt = `You are an expert business consultant and AI advisor. Analyze the user's business idea and provide comprehensive, actionable recommendations. Structure your response in clear markdown sections:
 
+## 📊 Business Feasibility Score
+Provide a **Feasibility Score: XX%** (a number between 0-100) based on the budget, location, market demand, competition, and overall viability. Explain briefly why you gave this score.
+
 ## 💡 Business Viability Assessment
 Brief assessment of the idea's potential.
 

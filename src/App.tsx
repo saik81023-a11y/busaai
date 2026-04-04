@@ -8,6 +8,7 @@ import Index from "./pages/Index.tsx";
 import PlanForm from "./pages/PlanForm.tsx";
 import Login from "./pages/Login.tsx";
 import SavedPlans from "./pages/SavedPlans.tsx";
+import Enquiry from "./pages/Enquiry.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
