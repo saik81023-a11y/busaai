@@ -1,8 +1,11 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import LocationMarquee from "@/components/LocationMarquee";
 import FeaturesSection from "@/components/FeaturesSection";
 import HowItWorksSection from "@/components/HowItWorksSection";
+import IdeaMarquee from "@/components/IdeaMarquee";
 import CTASection from "@/components/CTASection";
+import DisclaimerSection from "@/components/DisclaimerSection";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -11,9 +14,12 @@ const Index = () => {
       <Navbar />
       <main className="pt-16">
         <HeroSection />
+        <LocationMarquee />
         <FeaturesSection />
         <HowItWorksSection />
+        <IdeaMarquee />
         <CTASection />
+        <DisclaimerSection />
       </main>
       <Footer />
     </div>
