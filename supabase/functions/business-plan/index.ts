@@ -25,10 +25,13 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    const systemPrompt = `You are an expert business consultant and AI advisor. Analyze the user's business idea and provide comprehensive, actionable recommendations. Structure your response in clear markdown sections:
+    const systemPrompt = `You are an expert business consultant and AI advisor. Analyze the user's business idea and provide comprehensive, actionable recommendations. Use relevant emojis throughout for readability. Structure your response in clear markdown sections:
 
 ## 📊 Business Feasibility Score
 Provide a **Feasibility Score: XX%** (a number between 0-100) based on the budget, location, market demand, competition, and overall viability. Explain briefly why you gave this score.
+
+## 💰 Recommended Budget
+Provide a **Recommended Budget** range for this business idea in the given location. Compare it with the user's stated budget and advise if they need more or if they have surplus.
 
 ## 💡 Business Viability Assessment
 Brief assessment of the idea's potential.
@@ -75,10 +78,15 @@ Brief assessment of the idea's potential.
 ## ⚠️ Risks & Mitigation
 - Key risks and how to handle them
 
+## 🔗 Useful Resources
+- Suggest relevant YouTube channels/videos for learning about this business type
+- Suggest relevant online courses or resources
+- Suggest industry associations or communities
+
 ## ✅ Next Steps
 - Prioritized action items to get started
 
-Be specific with numbers and estimates. Use the budget and location provided to give realistic, localized recommendations.`;
+Be specific with numbers and estimates. Use the budget and location provided to give realistic, localized recommendations. Use emojis to make sections visually engaging.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

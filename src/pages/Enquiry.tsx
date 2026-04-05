@@ -8,6 +8,7 @@ import { ArrowLeft, Send, Loader2, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import busaaiLogo from "@/assets/busaai-logo.png";
 
 const Enquiry = () => {
   const [name, setName] = useState("");
@@ -54,9 +55,13 @@ const Enquiry = () => {
         <Card className="max-w-md w-full text-center">
           <CardContent className="py-12 flex flex-col items-center gap-4">
             <CheckCircle className="w-12 h-12 text-primary" />
-            <h2 className="text-xl font-bold text-foreground">Thank You!</h2>
+            <h2 className="text-xl font-bold text-foreground">Thank You! 🎉</h2>
             <p className="text-muted-foreground">
-              Your enquiry has been submitted. We'll get back to you shortly.
+              Your enquiry has been submitted. We'll get back to you at your email shortly.
+            </p>
+            <p className="text-sm text-muted-foreground">
+              You can also reach us at{" "}
+              <a href="mailto:contact@busaai.com" className="text-primary hover:underline">contact@busaai.com</a>
             </p>
             <Button asChild className="mt-4">
               <Link to="/">Back to Home</Link>
@@ -80,10 +85,12 @@ const Enquiry = () => {
 
       <div className="max-w-lg mx-auto px-6 py-12">
         <Card>
-          <CardHeader>
-            <CardTitle>Contact Us</CardTitle>
+          <CardHeader className="text-center">
+            <img src={busaaiLogo} alt="BusaAI Logo" className="w-16 h-16 mx-auto mb-2" width={64} height={64} />
+            <CardTitle>Contact Us 📧</CardTitle>
             <CardDescription>
               Have a question or want to learn more? Send us a message and we'll respond to your email.
+              You can also write to us at <a href="mailto:contact@busaai.com" className="text-primary hover:underline">contact@busaai.com</a>
             </CardDescription>
           </CardHeader>
           <CardContent>

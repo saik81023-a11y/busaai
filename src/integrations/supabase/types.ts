@@ -110,6 +110,33 @@ export type Database = {
         }
         Relationships: []
       }
+      user_searches: {
+        Row: {
+          budget: string
+          business_idea: string
+          created_at: string
+          id: string
+          location: string
+          user_id: string | null
+        }
+        Insert: {
+          budget: string
+          business_idea: string
+          created_at?: string
+          id?: string
+          location: string
+          user_id?: string | null
+        }
+        Update: {
+          budget?: string
+          business_idea?: string
+          created_at?: string
+          id?: string
+          location?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

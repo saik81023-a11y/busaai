@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Brain, Menu, X, LogOut, FolderOpen } from "lucide-react";
+import { Brain, Menu, X, LogOut, FolderOpen, Lightbulb } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -16,9 +16,10 @@ const Navbar = () => {
           <span className="text-xl font-bold text-foreground">BusaAI</span>
         </Link>
         <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-          <a href="#features" className="hover:text-foreground transition-colors">Features</a>
-          <a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</a>
+          <a href="/#features" className="hover:text-foreground transition-colors">Features</a>
+          <a href="/#how-it-works" className="hover:text-foreground transition-colors">How It Works</a>
           <Link to="/enquiry" className="hover:text-foreground transition-colors">Contact</Link>
+          <Link to="/suggestions" className="hover:text-foreground transition-colors">Suggestions</Link>
         </div>
         <div className="flex items-center gap-2">
           {user ? (
@@ -50,9 +51,10 @@ const Navbar = () => {
 
       {open && (
         <div className="md:hidden border-t border-border/50 bg-background/95 backdrop-blur-md px-6 py-4 space-y-4">
-          <a href="#features" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Features</a>
-          <a href="#how-it-works" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground transition-colors">How It Works</a>
+          <a href="/#features" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Features</a>
+          <a href="/#how-it-works" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground transition-colors">How It Works</a>
           <Link to="/enquiry" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Contact</Link>
+          <Link to="/suggestions" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Suggestions</Link>
           {user ? (
             <>
               <Link to="/saved-plans" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground transition-colors">My Plans</Link>
