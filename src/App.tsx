@@ -9,6 +9,7 @@ import PlanForm from "./pages/PlanForm.tsx";
 import Login from "./pages/Login.tsx";
 import SavedPlans from "./pages/SavedPlans.tsx";
 import Enquiry from "./pages/Enquiry.tsx";
+import Suggestions from "./pages/Suggestions.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/plan" element={<PlanForm />} />
             <Route path="/saved-plans" element={<SavedPlans />} />
             <Route path="/enquiry" element={<Enquiry />} />
+            <Route path="/suggestions" element={<Suggestions />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
