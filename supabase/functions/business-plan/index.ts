@@ -11,7 +11,11 @@ serve(async (req) => {
   }
 
   try {
-    const { budget, location, businessIdea } = await req.json();
+    const payload = await req.json();
+    const { budget, location, businessIdea, referenceImages = [] } = payload;
+    const safeReferenceImages = Array.isArray(referenceImages)
+      ? referenceImages.filter((image) => typeof image === "string" && image.startsWith("data:image/")).slice(0, 3)
+      : [];
 
     if (!budget || !location || !businessIdea) {
       return new Response(
@@ -25,7 +29,7 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    const systemPrompt = `You are an expert business consultant and AI advisor. Analyze the user's business idea and provide comprehensive, actionable recommendations. Use relevant emojis throughout for readability. Structure your response in clear markdown sections:
+    const systemPrompt = `You are an expert business consultant and AI advisor. Analyze the user's business idea and provide comprehensive, actionable recommendations. Use relevant emojis throughout for readability. If reference images are provided, use them as supporting visual context for style, product cues, setup needs, and target audience. Structure your response in clear markdown sections:
 
 ## 📊 Business Feasibility Score
 Provide a **Feasibility Score: XX%** (a number between 0-100) based on the budget, location, market demand, competition, and overall viability. Explain briefly why you gave this score.
@@ -100,11 +104,22 @@ Be specific with numbers and estimates. Use the budget and location provided to 
           { role: "system", content: systemPrompt },
           {
             role: "user",
-            content: `Please analyze this business idea and provide detailed recommendations:
+            content: [
+              {
+                type: "text",
+                text: `Please analyze this business idea and provide detailed recommendations:
 
 **Budget:** ${budget}
 **Location:** ${location}
-**Business Idea:** ${businessIdea}`,
+**Business Idea:** ${businessIdea}
+
+${safeReferenceImages.length ? "Reference images are attached. Use them only as helpful business context." : "No reference images were provided."}`,
+              },
+              ...safeReferenceImages.map((url) => ({
+                type: "image_url",
+                image_url: { url },
+              })),
+            ],
           },
         ],
         stream: true,

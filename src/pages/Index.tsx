@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import AboutSection from "@/components/AboutSection";
 import LocationMarquee from "@/components/LocationMarquee";
 import FeaturesSection from "@/components/FeaturesSection";
 import HowItWorksSection from "@/components/HowItWorksSection";
@@ -14,6 +15,7 @@ const Index = () => {
       <Navbar />
       <main className="pt-16">
         <HeroSection />
+        <AboutSection />
         <LocationMarquee />
         <FeaturesSection />
         <HowItWorksSection />

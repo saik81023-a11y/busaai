@@ -104,6 +104,11 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
     scroll-behavior: smooth;
   }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 @keyframes marquee {

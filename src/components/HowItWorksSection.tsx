@@ -10,10 +10,10 @@ const HowItWorksSection = () => {
     <section id="how-it-works" className="py-20 px-6">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 [text-wrap:balance]">
             How It Works
           </h2>
-          <p className="text-muted-foreground text-lg">Four simple steps to your perfect business plan.</p>
+          <p className="text-muted-foreground text-lg [text-wrap:balance]">Four simple steps to create a clearer, smarter business plan.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
