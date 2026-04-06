@@ -57,11 +57,11 @@ const Enquiry = () => {
             <CheckCircle className="w-12 h-12 text-primary" />
             <h2 className="text-xl font-bold text-foreground">Thank You! 🎉</h2>
             <p className="text-muted-foreground">
-              Your enquiry has been submitted. We'll get back to you at your email shortly.
+                Your enquiry has been submitted successfully. Our team will review it and respond soon.
             </p>
             <p className="text-sm text-muted-foreground">
               You can also reach us at{" "}
-              <a href="mailto:contact@busaai.com" className="text-primary hover:underline">contact@busaai.com</a>
+                <a href="mailto:contactbusaai@gmail.com" className="text-primary hover:underline">contactbusaai@gmail.com</a>
             </p>
             <Button asChild className="mt-4">
               <Link to="/">Back to Home</Link>
@@ -86,11 +86,11 @@ const Enquiry = () => {
       <div className="max-w-lg mx-auto px-6 py-12">
         <Card>
           <CardHeader className="text-center">
-            <img src={busaaiLogo} alt="BusaAI Logo" className="w-16 h-16 mx-auto mb-2" width={64} height={64} />
+            <img src={busaaiLogo} alt="BusaAI logo on the contact page" className="w-16 h-16 mx-auto mb-2" width={64} height={64} />
             <CardTitle>Contact Us 📧</CardTitle>
             <CardDescription>
-              Have a question or want to learn more? Send us a message and we'll respond to your email.
-              You can also write to us at <a href="mailto:contact@busaai.com" className="text-primary hover:underline">contact@busaai.com</a>
+              Have a question or want to learn more? Send us a message and our team will review it.
+              You can also write to us at <a href="mailto:contactbusaai@gmail.com" className="text-primary hover:underline">contactbusaai@gmail.com</a>
             </CardDescription>
           </CardHeader>
           <CardContent>

@@ -4,26 +4,34 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ArrowLeft, Brain, Loader2, Sparkles, Save, FolderOpen, Download, FileText } from "lucide-react";
+import { ArrowLeft, Brain, Loader2, Sparkles, Save, FolderOpen, Download, FileText, ImagePlus, PlayCircle } from "lucide-react";
 import { Link, Navigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
-import busaaiLogo from "@/assets/busaai-logo.png";
 
 const PLAN_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/business-plan`;
+const MAX_REFERENCE_IMAGES = 3;
+const MAX_IMAGE_DIMENSION = 1280;
+
+type ReferenceImage = {
+  name: string;
+  dataUrl: string;
+};
 
 async function streamPlan({
   budget,
   location,
   businessIdea,
+  referenceImages,
   onDelta,
   onDone,
 }: {
   budget: string;
   location: string;
   businessIdea: string;
+  referenceImages: string[];
   onDelta: (text: string) => void;
   onDone: () => void;
 }) {
@@ -33,7 +41,7 @@ async function streamPlan({
       "Content-Type": "application/json",
       Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
     },
-    body: JSON.stringify({ budget, location, businessIdea }),
+    body: JSON.stringify({ budget, location, businessIdea, referenceImages }),
   });
 
   if (!resp.ok) {
@@ -117,11 +125,66 @@ function markdownToPlainText(md: string): string {
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
 }
 
+function buildYoutubeLinks(businessIdea: string, location: string) {
+  const queries = [
+    {
+      label: `How to start ${businessIdea} in ${location}`,
+      query: `${businessIdea} business setup ${location}`,
+    },
+    {
+      label: `${businessIdea} market research ideas`,
+      query: `${businessIdea} market analysis ${location}`,
+    },
+    {
+      label: `${businessIdea} marketing and growth tips`,
+      query: `${businessIdea} marketing tips`,
+    },
+  ];
+
+  return queries.map((item) => ({
+    ...item,
+    href: `https://www.youtube.com/results?search_query=${encodeURIComponent(item.query)}`,
+  }));
+}
+
+async function optimizeImage(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const image = new Image();
+
+      image.onload = () => {
+        const scale = Math.min(1, MAX_IMAGE_DIMENSION / Math.max(image.width, image.height));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round(image.width * scale));
+        canvas.height = Math.max(1, Math.round(image.height * scale));
+
+        const context = canvas.getContext("2d");
+        if (!context) {
+          reject(new Error("Image processing is not supported in this browser."));
+          return;
+        }
+
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL("image/jpeg", 0.84));
+      };
+
+      image.onerror = () => reject(new Error("Could not read the selected image."));
+      image.src = reader.result as string;
+    };
+
+    reader.onerror = () => reject(new Error("Could not load the selected image."));
+    reader.readAsDataURL(file);
+  });
+}
+
 const PlanForm = () => {
   const { user, loading: authLoading } = useAuth();
   const [budget, setBudget] = useState("");
   const [location, setLocation] = useState("");
   const [businessIdea, setBusinessIdea] = useState("");
+  const [referenceImages, setReferenceImages] = useState<ReferenceImage[]>([]);
   const [result, setResult] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -129,6 +192,25 @@ const PlanForm = () => {
 
   if (authLoading) return null;
   if (!user) return <Navigate to="/login" replace />;
+
+  const handleImageSelection = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []).slice(0, MAX_REFERENCE_IMAGES);
+    if (!files.length) return;
+
+    try {
+      const processedImages = await Promise.all(
+        files.map(async (file) => ({
+          name: file.name,
+          dataUrl: await optimizeImage(file),
+        }))
+      );
+
+      setReferenceImages(processedImages);
+      toast.success(`${processedImages.length} image${processedImages.length > 1 ? "s" : ""} added for AI analysis.`);
+    } catch (error: any) {
+      toast.error(error.message || "Unable to process the selected image.");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -157,6 +239,7 @@ const PlanForm = () => {
         budget: budget.trim(),
         location: location.trim(),
         businessIdea: businessIdea.trim(),
+        referenceImages: referenceImages.map((image) => image.dataUrl),
         onDelta: (chunk) => {
           accumulated += chunk;
           setResult(accumulated);
@@ -196,7 +279,7 @@ const PlanForm = () => {
   const handleDownloadPDF = () => {
     const header = `BusaAI - AI Business Plan\n${"=".repeat(40)}\n\nBusiness Idea: ${businessIdea}\nBudget: ${budget}\nLocation: ${location}\nGenerated: ${new Date().toLocaleDateString()}\n\n${"=".repeat(40)}\n\n`;
     const plain = markdownToPlainText(result);
-    const footer = `\n\n${"=".repeat(40)}\nGenerated by BusaAI (busaai.lovable.app)\nDisclaimer: Information is given by AI from different available sources.\n© 2026 BusaAI | contact@busaai.com | contactbusaai@gmail.com`;
+    const footer = `\n\n${"=".repeat(40)}\nGenerated by BusaAI (busaai.lovable.app)\nDisclaimer: Information is given by AI from different available sources.\n© 2026 BusaAI | contactbusaai@gmail.com`;
     downloadAsText(header + plain + footer, `BusaAI-Plan-${Date.now()}.txt`);
     toast.success("Plan downloaded! 📄");
   };
@@ -210,7 +293,7 @@ const PlanForm = () => {
       .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
       .replace(/\n- /g, "<br>• ")
       .replace(/\n/g, "<br>");
-    const footerHtml = `<hr style="margin-top:40px;"><p style="text-align:center;color:#888;font-size:12px;">Generated by BusaAI (busaai.lovable.app)<br>Disclaimer: Information is given by AI from different available sources.<br>© 2026 BusaAI | contact@busaai.com | contactbusaai@gmail.com</p></body></html>`;
+    const footerHtml = `<hr style="margin-top:40px;"><p style="text-align:center;color:#888;font-size:12px;">Generated by BusaAI (busaai.lovable.app)<br>Disclaimer: Information is given by AI from different available sources.<br>© 2026 BusaAI | contactbusaai@gmail.com</p></body></html>`;
     
     const blob = new Blob([header + logoHtml + metaHtml + contentHtml + footerHtml], { type: "application/msword" });
     const url = URL.createObjectURL(blob);
@@ -250,7 +333,7 @@ const PlanForm = () => {
               AI Business Plan Generator
             </CardTitle>
             <CardDescription>
-              Enter your details below and our AI will create a comprehensive business plan with financial projections, recommended budget, marketing strategies, and more. 🚀
+              Enter your details below and BusaAI will create a plan with feasibility, recommended budget, image-aware insights, and helpful learning resources. 🚀
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -291,6 +374,39 @@ const PlanForm = () => {
                   maxLength={2000}
                 />
               </div>
+              <div className="space-y-3">
+                <div className="space-y-1">
+                  <Label htmlFor="reference-images">🖼️ Reference Images (optional)</Label>
+                  <p className="text-sm text-muted-foreground [text-wrap:balance]">
+                    Upload up to 3 images to help BusaAI understand your product, shop style, menu, or setup idea.
+                  </p>
+                </div>
+                <Input
+                  id="reference-images"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageSelection}
+                  disabled={isLoading}
+                />
+                {referenceImages.length > 0 && (
+                  <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+                    {referenceImages.map((image) => (
+                      <div key={image.name} className="overflow-hidden rounded-xl border border-border bg-muted/20">
+                        <img
+                          src={image.dataUrl}
+                          alt={`Reference upload for search: ${image.name}`}
+                          className="h-28 w-full object-cover"
+                          loading="lazy"
+                          width={320}
+                          height={200}
+                        />
+                        <p className="truncate px-3 py-2 text-xs text-muted-foreground">{image.name}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
               <Button type="submit" disabled={isLoading} size="lg" className="w-full md:w-auto">
                 {isLoading ? (
                   <>
@@ -314,6 +430,7 @@ const PlanForm = () => {
           const scoreColor = feasibilityScore !== null
             ? feasibilityScore >= 70 ? "text-green-600" : feasibilityScore >= 40 ? "text-yellow-600" : "text-red-600"
             : "";
+          const youtubeLinks = buildYoutubeLinks(businessIdea.trim(), location.trim());
 
           return (
             <>
@@ -360,8 +477,30 @@ const PlanForm = () => {
                   <div className="prose prose-sm max-w-none dark:prose-invert">
                     <ReactMarkdown>{result}</ReactMarkdown>
                   </div>
+                  <div className="mt-6 rounded-2xl border border-border bg-muted/30 p-4">
+                    <div className="flex items-center gap-2 text-foreground">
+                      <PlayCircle className="w-4 h-4 text-primary" />
+                      <h3 className="text-base font-semibold">Relevant YouTube searches</h3>
+                    </div>
+                    <p className="mt-1 text-sm text-muted-foreground [text-wrap:balance]">
+                      Open these YouTube searches for videos related to your idea, market, and location.
+                    </p>
+                    <div className="mt-4 grid gap-2">
+                      {youtubeLinks.map((link) => (
+                        <a
+                          key={link.href}
+                          href={link.href}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground transition-colors hover:bg-muted"
+                        >
+                          {link.label}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
                   <div className="mt-8 pt-4 border-t border-border text-xs text-muted-foreground text-center">
-                    <p>Generated by BusaAI | <a href="mailto:contact@busaai.com" className="text-primary hover:underline">contact@busaai.com</a></p>
+                    <p>Generated by BusaAI | <a href="mailto:contactbusaai@gmail.com" className="text-primary hover:underline">contactbusaai@gmail.com</a></p>
                     <p className="mt-1">⚠️ Disclaimer: Information is given by AI from different available sources.</p>
                   </div>
                 </CardContent>
