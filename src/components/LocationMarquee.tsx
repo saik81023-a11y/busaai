@@ -8,7 +8,9 @@ const locations = [
   "🇮🇳 Kolkata", "🇮🇳 Pune", "🇮🇳 Ahmedabad", "🇺🇸 New York", "🇬🇧 London",
   "🇦🇪 Dubai", "🇸🇬 Singapore", "🇯🇵 Tokyo", "🇦🇺 Sydney", "🇩🇪 Berlin",
   "🇫🇷 Paris", "🇨🇦 Toronto", "🇧🇷 São Paulo", "🇿🇦 Cape Town", "🇰🇷 Seoul",
-  "🇷🇺 Moscow", "🇺🇸 San Francisco", "🇹🇷 Istanbul",
+  "🇷🇺 Moscow", "🇺🇸 San Francisco", "🇹🇷 Istanbul", "🇲🇽 Mexico City",
+  "🇹🇭 Bangkok", "🇻🇳 Ho Chi Minh City", "🇳🇬 Lagos", "🇰🇪 Nairobi",
+  "🇮🇩 Jakarta", "🇵🇭 Manila", "🇲🇾 Kuala Lumpur", "🇪🇬 Cairo",
 ];
 
 const featuredLocations = [
@@ -40,7 +42,7 @@ const featuredLocations = [
 
 const LocationMarquee = () => {
   return (
-    <section className="py-10 overflow-hidden bg-muted/20">
+    <section className="py-10 overflow-hidden bg-muted/30">
       <div className="text-center mb-6">
         <h2 className="text-2xl md:text-3xl font-bold text-foreground [text-wrap:balance]">
           🌍 Explore Business Ideas Throughout the World with BusaAI
@@ -62,7 +64,7 @@ const LocationMarquee = () => {
 
       <div className="max-w-6xl mx-auto mt-8 px-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {featuredLocations.map((location) => (
-          <article key={location.name} className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+          <article key={location.name} className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm hover:shadow-md transition-shadow">
             <img
               src={location.image}
               alt={location.alt}

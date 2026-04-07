@@ -38,7 +38,7 @@ Provide a **Feasibility Score: XX%** (a number between 0-100) based on the budge
 Provide a **Recommended Budget** range for this business idea in the given location. Compare it with the user's stated budget and advise if they need more or if they have surplus.
 
 ## 💡 Business Viability Assessment
-Brief assessment of the idea's potential.
+Brief assessment of the idea's potential. Include interesting facts and insights that make the analysis engaging.
 
 ## 💰 Financial Breakdown
 - Estimated startup costs
@@ -82,6 +82,11 @@ Brief assessment of the idea's potential.
 ## ⚠️ Risks & Mitigation
 - Key risks and how to handle them
 
+## 💡 Interesting Insights
+- Share 3-5 fascinating facts, trends, or success stories related to this business type and location
+- Include relevant statistics that would interest the entrepreneur
+- Mention any upcoming opportunities or seasonal trends
+
 ## 🔗 Useful Resources
 - Suggest relevant YouTube channels/videos for learning about this business type
 - Suggest relevant online courses or resources
@@ -90,7 +95,7 @@ Brief assessment of the idea's potential.
 ## ✅ Next Steps
 - Prioritized action items to get started
 
-Be specific with numbers and estimates. Use the budget and location provided to give realistic, localized recommendations. Use emojis to make sections visually engaging.`;
+Be specific with numbers and estimates. Use the budget and location provided to give realistic, localized recommendations. Use emojis to make sections visually engaging. Make the content interesting and engaging — not just informational.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

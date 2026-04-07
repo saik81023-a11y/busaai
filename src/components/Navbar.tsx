@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Brain, Menu, X, LogOut, FolderOpen, Lightbulb } from "lucide-react";
+import { Brain, Menu, X, LogOut, FolderOpen } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -10,22 +10,21 @@ const Navbar = () => {
   const displayName = user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split("@")[0] || "User";
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-lg border-b border-border/40">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
           <Brain className="w-6 h-6 text-primary" />
-          <span className="text-xl font-bold text-foreground">BusaAI</span>
+          <span className="text-xl font-bold text-foreground tracking-tight">BusaAI</span>
         </Link>
-        <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
+        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
           <a href="/#features" className="hover:text-foreground transition-colors">Features</a>
           <a href="/#how-it-works" className="hover:text-foreground transition-colors">How It Works</a>
-          <Link to="/enquiry" className="hover:text-foreground transition-colors">Contact</Link>
           <Link to="/suggestions" className="hover:text-foreground transition-colors">Suggestions</Link>
         </div>
         <div className="flex items-center gap-2">
           {user ? (
             <div className="hidden md:flex items-center gap-2">
-              <span className="max-w-[150px] truncate rounded-full bg-muted px-3 py-1 text-xs font-medium text-foreground">
+              <span className="max-w-[150px] truncate rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
                 Hi, {displayName}
               </span>
               <Button asChild variant="ghost" size="sm">
@@ -54,14 +53,13 @@ const Navbar = () => {
       </div>
 
       {open && (
-        <div className="md:hidden border-t border-border/50 bg-background/95 backdrop-blur-md px-6 py-4 space-y-4">
+        <div className="md:hidden border-t border-border/40 bg-background/95 backdrop-blur-lg px-6 py-4 space-y-4">
           <a href="/#features" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Features</a>
           <a href="/#how-it-works" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground transition-colors">How It Works</a>
-          <Link to="/enquiry" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Contact</Link>
           <Link to="/suggestions" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Suggestions</Link>
           {user ? (
             <>
-              <div className="rounded-lg bg-muted px-3 py-2 text-sm text-foreground">
+              <div className="rounded-lg bg-primary/10 px-3 py-2 text-sm text-foreground">
                 Signed in as <span className="font-medium">{displayName}</span>
               </div>
               <Link to="/saved-plans" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground transition-colors">My Plans</Link>

@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 const HeroSection = () => {
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/20" />
-      <div className="absolute top-20 right-20 w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-20 left-20 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse delay-1000" />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-primary/3" />
+      <div className="absolute top-20 right-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 left-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
         <div className="mb-8 flex flex-wrap items-center justify-center gap-3">
@@ -46,7 +46,7 @@ const HeroSection = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild size="lg" className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/25">
+          <Button asChild size="lg" className="text-lg px-8 py-6 shadow-lg shadow-primary/20">
             <Link to="/plan">Start Planning for Free <ArrowRight className="ml-2 w-5 h-5" /></Link>
           </Button>
           <Button size="lg" variant="outline" className="text-lg px-8 py-6" asChild>
@@ -59,9 +59,9 @@ const HeroSection = () => {
             <Brain className="w-4 h-4 text-primary" />
             <span>AI Analysis</span>
           </div>
-          <div className="w-1 h-1 rounded-full bg-muted-foreground" />
+          <div className="w-1 h-1 rounded-full bg-border" />
           <span>🚀 1,000,000+ Business Plans</span>
-          <div className="w-1 h-1 rounded-full bg-muted-foreground" />
+          <div className="w-1 h-1 rounded-full bg-border" />
           <span>Free to Start</span>
         </div>
       </div>

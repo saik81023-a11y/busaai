@@ -27,14 +27,9 @@ const AboutSection = () => {
     <section className="py-20 px-6">
       <div className="max-w-6xl mx-auto grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
         <div>
-          <div className="mb-4 flex flex-wrap items-center gap-3">
-            <span className="inline-flex items-center rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
-              About BusaAI
-            </span>
-            <span className="inline-flex items-center rounded-full bg-muted px-4 py-2 text-sm font-medium text-foreground">
-              🇮🇳 Made in India
-            </span>
-          </div>
+          <span className="inline-flex items-center rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary mb-4">
+            About BusaAI
+          </span>
 
           <h2 className="text-3xl md:text-4xl font-bold text-foreground [text-wrap:balance]">
             BusaAI helps entrepreneurs turn ideas into clear, practical business plans.
@@ -48,7 +43,7 @@ const AboutSection = () => {
 
         <div className="grid gap-4">
           {highlights.map((item) => (
-            <Card key={item.title} className="border-border/60 bg-card/80">
+            <Card key={item.title} className="border-border/50 bg-card shadow-sm hover:shadow-md transition-shadow">
               <CardContent className="flex gap-4 p-5">
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <item.icon className="h-5 w-5" />
