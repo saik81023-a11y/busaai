@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const CTASection = () => {
   return (
     <section className="py-20 px-6">
-      <div className="max-w-4xl mx-auto text-center rounded-2xl bg-gradient-to-br from-primary to-[hsl(var(--primary-glow))] p-12 md:p-16 shadow-2xl shadow-primary/20">
+      <div className="max-w-4xl mx-auto text-center rounded-2xl bg-gradient-to-br from-primary to-[hsl(var(--primary-glow))] p-12 md:p-16 shadow-xl">
         <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-4 [text-wrap:balance]">
           Ready to turn your idea into a business? 🚀
         </h2>
