@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Brain } from "lucide-react";
-import { lovable } from "@/integrations/lovable/index";
+import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -13,16 +13,16 @@ const Login = () => {
   if (user) return <Navigate to="/plan" replace />;
 
   const handleGoogleSignIn = async () => {
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
     });
 
-    if (result.error) {
+    if (error) {
       toast.error("Sign in failed. Please try again.");
-      return;
     }
-
-    if (result.redirected) return;
   };
 
   return (
@@ -56,3 +56,4 @@ const Login = () => {
 };
 
 export default Login;
+
