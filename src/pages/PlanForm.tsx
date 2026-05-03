@@ -25,6 +25,7 @@ async function streamPlan({
   location,
   businessIdea,
   referenceImages,
+  accessToken,
   onDelta,
   onDone,
 }: {
@@ -32,6 +33,7 @@ async function streamPlan({
   location: string;
   businessIdea: string;
   referenceImages: string[];
+  accessToken: string;
   onDelta: (text: string) => void;
   onDone: () => void;
 }) {
@@ -39,7 +41,8 @@ async function streamPlan({
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+      Authorization: `Bearer ${accessToken}`,
+      apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
     },
     body: JSON.stringify({ budget, location, businessIdea, referenceImages }),
   });
@@ -235,11 +238,18 @@ const PlanForm = () => {
     let accumulated = "";
 
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        toast.error("Please sign in again to generate a plan.");
+        setIsLoading(false);
+        return;
+      }
       await streamPlan({
         budget: budget.trim(),
         location: location.trim(),
         businessIdea: businessIdea.trim(),
         referenceImages: referenceImages.map((image) => image.dataUrl),
+        accessToken: session.access_token,
         onDelta: (chunk) => {
           accumulated += chunk;
           setResult(accumulated);
