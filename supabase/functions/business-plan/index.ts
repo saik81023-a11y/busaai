@@ -33,20 +33,56 @@ serve(async (req) => {
 
     const payload = await req.json();
     const { budget, location, businessIdea, referenceImages = [] } = payload;
-    const safeReferenceImages = Array.isArray(referenceImages)
-      ? referenceImages.filter((image) => typeof image === "string" && image.startsWith("data:image/")).slice(0, 3)
-      : [];
 
-    if (!budget || !location || !businessIdea) {
+    if (
+      typeof budget !== "string" ||
+      typeof location !== "string" ||
+      typeof businessIdea !== "string" ||
+      !budget || !location || !businessIdea
+    ) {
       return new Response(
         JSON.stringify({ error: "Budget, location, and business idea are required." }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
+    const MAX_BUDGET = 200;
+    const MAX_LOCATION = 300;
+    const MAX_IDEA = 3000;
+    if (
+      budget.length > MAX_BUDGET ||
+      location.length > MAX_LOCATION ||
+      businessIdea.length > MAX_IDEA
+    ) {
+      return new Response(
+        JSON.stringify({ error: "Input too long." }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const MAX_IMAGE_BYTES = 5 * 1024 * 1024; // 5MB per image
+    const MAX_TOTAL_IMAGE_BYTES = 12 * 1024 * 1024; // 12MB total
+    const candidateImages = Array.isArray(referenceImages)
+      ? referenceImages
+          .filter((image) => typeof image === "string" && image.startsWith("data:image/"))
+          .slice(0, 3)
+      : [];
+    let totalImageBytes = 0;
+    const safeReferenceImages: string[] = [];
+    for (const img of candidateImages) {
+      if (img.length > MAX_IMAGE_BYTES) continue;
+      totalImageBytes += img.length;
+      if (totalImageBytes > MAX_TOTAL_IMAGE_BYTES) break;
+      safeReferenceImages.push(img);
+    }
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
+      console.error("business-plan: AI key missing");
+      return new Response(
+        JSON.stringify({ error: "Service temporarily unavailable. Please try again later." }),
+        { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const systemPrompt = `You are an expert business consultant and AI advisor. Analyze the user's business idea and provide comprehensive, actionable recommendations. Use relevant emojis throughout for readability. If reference images are provided, use them as supporting visual context for style, product cues, setup needs, and target audience. Structure your response in clear markdown sections:
@@ -178,7 +214,7 @@ ${safeReferenceImages.length ? "Reference images are attached. Use them only as 
   } catch (e) {
     console.error("business-plan error:", e);
     return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }),
+      JSON.stringify({ error: "An internal error occurred. Please try again." }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
