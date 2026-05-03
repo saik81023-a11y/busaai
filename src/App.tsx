@@ -15,6 +15,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminItems from "./pages/admin/AdminItems";
 import AdminContact from "./pages/admin/AdminContact";
+import RequireAdmin from "./components/RequireAdmin";
 
 const queryClient = new QueryClient();
 
@@ -34,10 +35,10 @@ const App = () => (
             <Route path="/enquiry" element={<Enquiry />} />
             <Route path="/contact" element={<Enquiry />} />
             <Route path="/suggestions" element={<Suggestions />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin/users" element={<AdminUsers />} />
-            <Route path="/admin/items" element={<AdminItems />} />
-            <Route path="/admin/contact" element={<AdminContact />} />
+            <Route path="/admin" element={<RequireAdmin><AdminDashboard /></RequireAdmin>} />
+            <Route path="/admin/users" element={<RequireAdmin><AdminUsers /></RequireAdmin>} />
+            <Route path="/admin/items" element={<RequireAdmin><AdminItems /></RequireAdmin>} />
+            <Route path="/admin/contact" element={<RequireAdmin><AdminContact /></RequireAdmin>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
