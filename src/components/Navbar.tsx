@@ -1,79 +1,99 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Brain, Menu, X, LogOut, FolderOpen } from "lucide-react";
+import { Menu, X, LogOut, FolderOpen } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { user, signOut } = useAuth();
-  const displayName = user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split("@")[0] || "User";
+  const displayName =
+    user?.user_metadata?.full_name ||
+    user?.user_metadata?.name ||
+    user?.email?.split("@")[0] ||
+    "User";
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-lg border-b border-border/40">
-      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <Brain className="w-6 h-6 text-primary" />
-          <span className="text-xl font-bold text-foreground tracking-tight">BusaAI</span>
+    <nav className="sticky top-0 z-50 h-[60px] border-b border-border bg-background/90 backdrop-blur-lg">
+      <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-6">
+        <Link to="/" className="font-display text-[1.3rem] font-extrabold tracking-tight text-primary">
+          Busa<span className="font-normal text-muted-foreground">AI</span>
         </Link>
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
-          <a href="/#features" className="hover:text-foreground transition-colors">Features</a>
-          <a href="/#how-it-works" className="hover:text-foreground transition-colors">How It Works</a>
-          <Link to="/suggestions" className="hover:text-foreground transition-colors">Suggestions</Link>
-        </div>
+
+        <ul className="hidden items-center gap-8 md:flex">
+          <li><a href="/#tool" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">Try it</a></li>
+          <li><a href="/#features" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">Features</a></li>
+          <li><a href="/#how" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">How it works</a></li>
+          <li><Link to="/suggestions" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">Suggestions</Link></li>
+        </ul>
+
         <div className="flex items-center gap-2">
           {user ? (
-            <div className="hidden md:flex items-center gap-2">
-              <span className="max-w-[150px] truncate rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+            <div className="hidden items-center gap-2 md:flex">
+              <span className="max-w-[140px] truncate rounded-full bg-primary/15 px-3 py-1 text-xs font-medium text-primary">
                 Hi, {displayName}
               </span>
-              <Button asChild variant="ghost" size="sm">
-                <Link to="/saved-plans"><FolderOpen className="w-4 h-4 mr-1" /> My Plans</Link>
-              </Button>
-              <Button asChild size="sm">
-                <Link to="/plan">New Plan</Link>
-              </Button>
-              <Button variant="ghost" size="icon" onClick={signOut} title="Sign out">
-                <LogOut className="w-4 h-4" />
-              </Button>
+              <Link
+                to="/saved-plans"
+                className="inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <FolderOpen className="h-4 w-4" /> My Plans
+              </Link>
+              <Link
+                to="/plan"
+                className="rounded-md bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-glow"
+              >
+                New Plan
+              </Link>
+              <button
+                onClick={signOut}
+                title="Sign out"
+                className="rounded-md p-1.5 text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <LogOut className="h-4 w-4" />
+              </button>
             </div>
           ) : (
-            <Button asChild size="sm" className="hidden md:inline-flex">
-              <Link to="/login">Start Planning for Free</Link>
-            </Button>
+            <Link
+              to="/login"
+              className="hidden rounded-md bg-primary px-5 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-glow md:inline-flex"
+            >
+              Start for free
+            </Link>
           )}
+
           <button
-            className="md:hidden p-2 text-foreground"
+            className="p-2 text-foreground md:hidden"
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
           >
-            {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
       {open && (
-        <div className="md:hidden border-t border-border/40 bg-background/95 backdrop-blur-lg px-6 py-4 space-y-4">
-          <a href="/#features" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Features</a>
-          <a href="/#how-it-works" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground transition-colors">How It Works</a>
-          <Link to="/suggestions" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground transition-colors">Suggestions</Link>
+        <div className="space-y-3 border-t border-border bg-background/95 px-6 py-4 backdrop-blur-lg md:hidden">
+          <a href="/#tool" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground">Try it</a>
+          <a href="/#features" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground">Features</a>
+          <a href="/#how" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground">How it works</a>
+          <Link to="/suggestions" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground">Suggestions</Link>
           {user ? (
             <>
-              <div className="rounded-lg bg-primary/10 px-3 py-2 text-sm text-foreground">
+              <div className="rounded-md bg-primary/10 px-3 py-2 text-sm">
                 Signed in as <span className="font-medium">{displayName}</span>
               </div>
-              <Link to="/saved-plans" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground transition-colors">My Plans</Link>
-              <Button asChild size="sm" className="w-full">
-                <Link to="/plan" onClick={() => setOpen(false)}>New Plan</Link>
-              </Button>
-              <Button variant="outline" size="sm" className="w-full" onClick={() => { signOut(); setOpen(false); }}>
-                Sign Out
-              </Button>
+              <Link to="/saved-plans" onClick={() => setOpen(false)} className="block text-sm text-muted-foreground hover:text-foreground">My Plans</Link>
+              <Link to="/plan" onClick={() => setOpen(false)} className="block w-full rounded-md bg-primary px-4 py-2 text-center text-sm font-medium text-primary-foreground">
+                New Plan
+              </Link>
+              <button onClick={() => { signOut(); setOpen(false); }} className="block w-full rounded-md border border-border-strong px-4 py-2 text-sm">
+                Sign out
+              </button>
             </>
           ) : (
-            <Button asChild size="sm" className="w-full">
-              <Link to="/login" onClick={() => setOpen(false)}>Start Planning for Free</Link>
-            </Button>
+            <Link to="/login" onClick={() => setOpen(false)} className="block w-full rounded-md bg-primary px-4 py-2 text-center text-sm font-medium text-primary-foreground">
+              Start for free
+            </Link>
           )}
         </div>
       )}
