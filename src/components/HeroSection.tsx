@@ -1,68 +1,64 @@
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Brain, Sparkles, Save, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-primary/3" />
-      <div className="absolute top-20 right-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 left-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
-        <div className="mb-8 flex flex-wrap items-center justify-center gap-3">
-          <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-primary">
-            <Sparkles className="w-4 h-4" />
-            <span className="text-sm font-medium">AI-Powered Business Planning</span>
-          </div>
-          <div className="inline-flex items-center rounded-full bg-muted px-4 py-2 text-sm font-medium text-foreground">
-            🇮🇳 Made in India
-          </div>
+    <section className="mx-auto grid max-w-6xl items-center gap-16 px-6 py-20 md:grid-cols-2 md:py-28">
+      <div>
+        <div className="mb-4 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-primary">
+          <span className="inline-block h-px w-6 bg-primary" />
+          AI Business Planning
         </div>
-
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground mb-6 leading-tight [text-wrap:balance]">
-          Start Planning for Free
-          <span className="block bg-gradient-to-r from-primary to-[hsl(var(--primary-glow))] bg-clip-text text-transparent">
-            with BusaAI
-          </span>
+        <h1 className="mb-5 font-display text-4xl font-extrabold leading-[1.05] tracking-tight md:text-5xl lg:text-[3.2rem]">
+          Turn your idea into a <span className="text-primary">funded plan</span>
         </h1>
-
-        <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-4 [text-wrap:balance]">
-          Explore business ideas throughout the world with AI-backed feasibility, budgets, location analysis,
-          and step-by-step planning to launch with confidence.
+        <p className="mb-8 max-w-xl text-base font-light leading-relaxed text-muted-foreground">
+          Get AI-powered feasibility scores, recommended budgets, location insights, and a practical roadmap — in under 30 seconds.
         </p>
-
-        <p className="text-base text-primary font-semibold mb-4 italic [text-wrap:balance]">
-          ✨ Engineering Your Entrepreneurship Vision
-        </p>
-
-        <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-muted-foreground mb-8">
-          <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-muted">
-            <Save className="w-3.5 h-3.5 text-primary" /> Save your plan to revisit anytime
-          </span>
-          <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-muted">
-            <Globe className="w-3.5 h-3.5 text-primary" /> Explore ideas worldwide
-          </span>
+        <div className="flex flex-wrap items-center gap-3">
+          <Link
+            to="/plan"
+            className="rounded-lg bg-primary px-7 py-3 text-sm font-medium text-primary-foreground transition-all hover:-translate-y-0.5 hover:bg-primary-glow"
+          >
+            Analyze my idea →
+          </Link>
+          <a
+            href="#how"
+            className="rounded-lg border border-border-strong px-6 py-3 text-sm font-medium text-muted-foreground transition-colors hover:border-muted-foreground hover:text-foreground"
+          >
+            See how it works
+          </a>
         </div>
+      </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild size="lg" className="text-lg px-8 py-6 shadow-lg shadow-primary/20">
-            <Link to="/plan">Start Planning for Free <ArrowRight className="ml-2 w-5 h-5" /></Link>
-          </Button>
-          <Button size="lg" variant="outline" className="text-lg px-8 py-6" asChild>
-            <a href="#how-it-works">See How It Works</a>
-          </Button>
-        </div>
-
-        <div className="mt-16 flex items-center justify-center gap-8 text-muted-foreground text-sm flex-wrap">
-          <div className="flex items-center gap-2">
-            <Brain className="w-4 h-4 text-primary" />
-            <span>AI Analysis</span>
+      {/* Hero card */}
+      <div className="relative hidden overflow-hidden rounded-2xl border border-border bg-card p-7 md:block">
+        <div
+          className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full"
+          style={{ background: "radial-gradient(circle, hsl(var(--primary) / 0.15) 0%, transparent 70%)" }}
+        />
+        <div className="mb-6 flex items-center justify-between">
+          <div className="font-display text-sm font-bold">Cloud Kitchen — Hyderabad</div>
+          <div className="rounded-full bg-primary/15 px-2.5 py-1 text-[0.7rem] font-medium text-primary">
+            ✦ AI Analysis
           </div>
-          <div className="w-1 h-1 rounded-full bg-border" />
-          <span>🚀 1,000,000+ Business Plans</span>
-          <div className="w-1 h-1 rounded-full bg-border" />
-          <span>Free to Start</span>
+        </div>
+        <div className="mx-auto mb-5 flex h-20 w-20 flex-col items-center justify-center rounded-full border-[3px] border-primary">
+          <div className="font-display text-2xl font-extrabold leading-none text-primary">82</div>
+          <div className="text-[0.6rem] uppercase tracking-[0.1em] text-muted-foreground">Score</div>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            { l: "Budget", v: "₹8.5L", s: "Recommended start" },
+            { l: "ROI Est.", v: "14 mo", s: "Break-even" },
+            { l: "Market", v: "High", s: "Demand score" },
+            { l: "Risk", v: "Medium", s: "Competition" },
+          ].map((m) => (
+            <div key={m.l} className="rounded-[10px] bg-accent p-3.5">
+              <div className="mb-1 text-[0.7rem] uppercase tracking-wide text-muted-foreground">{m.l}</div>
+              <div className="font-display text-base font-bold">{m.v}</div>
+              <div className="mt-0.5 text-[0.7rem] text-muted-foreground/70">{m.s}</div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
